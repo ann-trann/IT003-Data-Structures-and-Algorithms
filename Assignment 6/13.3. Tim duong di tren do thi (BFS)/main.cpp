@@ -1,0 +1,133 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+vector<char> ke[1005];
+bool ok[1005];
+char truoc[1005];
+vector<string> vt;
+
+void bfs(char u, char v)
+{
+    queue<int> q;
+    q.push(u);
+    while (q.size() > 0)
+    {
+        int top = q.front();
+        q.pop();
+
+        ok[top] = true;
+        if (top == v) return ;
+        for (int i = 0; i < ke[top].size(); i++)
+        {
+            if (!ok[ke[top][i]])
+            {
+                ok[ke[top][i]] = true;
+                truoc[ke[top][i]] = top;
+                q.push(ke[top][i]);
+            }
+        }
+    }
+}
+
+void trace(char u, char v)
+{
+    string s;
+    if (!ok[v])
+    {
+        s =  "no_path";
+        vt.push_back(s);
+        return ;
+    }
+    vector<char> a;
+    while(u != v)
+    {
+        if (u == 0)
+        {
+            s =  "no_path";
+            vt.push_back(s);
+            return ;
+        }
+            a.push_back(u);
+            u = truoc[u];
+    }
+    a.push_back(v);
+    reverse(a.begin(), a.end());
+    for (int i = 0; i < a.size(); i++){
+        s = s + a[i] + " ";
+    }
+        vt.push_back(s);
+}
+
+int main(){
+    memset(ok, false, sizeof(ok));
+    memset(truoc, 0, sizeof(truoc));
+    for (int i = 0; i < 1001; i++)
+        ke[i].clear();
+    int a, b;
+    char nguon, dich;
+    cin >> a >> b;
+
+    for (int i = 0; i < a; i++){
+        char x; cin >> x;
+    }
+
+    for (int i = 0; i < b; i++)
+    {
+        char u, v;
+        cin >> u >> v;
+        ke[u].push_back(v);
+        //ke[v].push_back(u);
+    }
+
+    int t; cin >> t;
+    while (t--)
+    {
+        memset(ok, false, sizeof(ok));
+        memset(truoc, 0, sizeof(truoc));
+        cin >> nguon >> dich;
+        bfs(nguon, dich);
+        trace(dich, nguon);
+    }
+
+    for (string x : vt)
+        cout << x << "\n";
+
+    return 0;
+}
+
+/*
+
+6 13
+W K I U M Q
+W M
+W Q
+I W
+I K
+I U
+I M
+U W
+U K
+U Q
+M U
+M Q
+Q I
+Q M
+3
+U I
+W K
+K M
+
+*/
+
+
+
+
+
+
+
+
+
+
+
+
+
